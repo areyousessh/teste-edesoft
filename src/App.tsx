@@ -1,61 +1,39 @@
-import {initializeApp} from "firebase/app"
-import {addDoc, collection, getDocs, getFirestore, doc, deleteDoc} from "firebase/firestore"
-import { useEffect, useState } from "react";
-
-const firebaseConfig = initializeApp ({
-  apiKey: "AIzaSyC-DPesmPR2Gw2Q0xxYTwy1AWL6J1Z7gt8",
-  authDomain: "react-crud-95be9.firebaseapp.com",
-  projectId: "react-crud-95be9",
-});
-
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "./features/Users";
+import { JSXElementConstructor, ReactElement, ReactFragment, ReactNode, ReactPortal, useEffect, useState } from "react";
 
 export function App() {
+
+    const userList = useSelector((state) => state.users.value)
+    const dispatch = useDispatch()
     const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [users, setUsers] = useState([])
-
-    const db = getFirestore(firebaseConfig)
-    const userCollectionRef = collection(db, "users")
-
-    async function createUser() {
-        const user = await addDoc(userCollectionRef, {
-            name, email
-        });
-
-        console.log(user)
-    }
-    
-
-    useEffect(() =>{
-        const getUsers = async () => {
-            const data = await getDocs(userCollectionRef);
-            setUsers(data.docs.map((doc) => ({ ...doc.data(), id:doc.id })));
-        };
-
-        getUsers();
-    }, [])
-
-    async function deleteUser(id) {
-        const userDoc = doc(db, 'users', id);
-        await deleteDoc(userDoc);
-    }
+    const [username, setUserName] = useState("")
 
     return(
-        <div className="flex flex-col items-center justify-center">
-            <input className="mt-20 w-44 h-8 rounded-md" type="text" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}/>
-            <input className="mt-5 w-44 h-8 mb-5 rounded-md" type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
-            <button className="w-44 h-8 mb-10 bg-white rounded-md" onClick={createUser}>Criar User</button>
-            <ul>
-              {users.map((user) =>{
-                return(
-                    <div className="flex flex-col items-start justify-start" key={user.id}>
-                        <li className="text-xl">{user.name}</li>
-                        <li>{user.email}</li>
-                        <button className="w-40 h-8 mt-5 bg-white rounded-md" onClick={() => deleteUser(user.id)}>Deletar usuario</button>
-                    </div>
-                )
-              })}
-            </ul>
+        <div className="flex flex-1 flex-col items-center justify-center">
+            <div className="flex flex-1">
+                <input className="mt-20 mr-10 text-center" type="text" placeholder="Name" onChange={(event) => {setName(event.target.value)}}/>
+                <input className="mt-20 mr-10 text-center" type="text" placeholder="Username" onChange={(event) => {setUserName(event.target.value)}}/>
+                <button onClick={() => {dispatch(addUser({id: userList[userList.lenght -1]. id + 1 , name , username}))}} className="mt-20 mr-10 bg-slate-200 w-20">Add User</button>
+            </div>
+
+            <div className="flex flex-1 flex-col items-center justify-center mt-20">
+                {userList.map((user: {
+                    [x: string]: ReactNode; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; 
+            }) => {
+                    return (
+                        <div className="flex flex-1 flex-col w-full h-full border-2 border-stone-500 mb-8">
+                            <h1 className="mt-2 text-center">{user.name}</h1>
+                            <h1 className="mt-1 mb-5 text-center">{user.username}</h1>
+                            <div className="flex flex-1">
+                                <input className="h-7 w-26 ml-4 mt-4 mb-8 text-center" type="text" placeholder="new username"/>
+                                <button className="flex flex-1 mr-10 mt-4 ml-5 h-7 w-40 bg-slate-200 items-center justify-center">Update Username</button>
+                                <button className="flex flex-1 mr-10 mt-4 h-7 w-40 bg-slate-200 items-center justify-center">Delete User</button>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
     )
 }
