@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addUser } from "./features/Users";
+import { addUser, deleteUser, updateUserName } from "./features/Users";
 import { JSXElementConstructor, ReactElement, ReactFragment, ReactNode, ReactPortal, useEffect, useState } from "react";
 
 export function App() {
@@ -8,6 +8,7 @@ export function App() {
     const dispatch = useDispatch()
     const [name, setName] = useState("")
     const [username, setUserName] = useState("")
+    const [newUsername, setNewUserName] = useState("")
 
     return(
         <div className="flex flex-1 flex-col items-center justify-center">
@@ -26,9 +27,9 @@ export function App() {
                             <h1 className="mt-2 text-center">{user.name}</h1>
                             <h1 className="mt-1 mb-5 text-center">{user.username}</h1>
                             <div className="flex flex-1">
-                                <input className="h-7 w-26 ml-4 mt-4 mb-8 text-center" type="text" placeholder="new username"/>
-                                <button className="flex flex-1 mr-10 mt-4 ml-5 h-7 w-40 bg-slate-200 items-center justify-center">Update Username</button>
-                                <button className="flex flex-1 mr-10 mt-4 h-7 w-40 bg-slate-200 items-center justify-center">Delete User</button>
+                                <input className="h-7 w-26 ml-4 mt-4 mb-8 text-center" type="text" placeholder="new username" onChange={(event) =>{setNewUserName(event.target.value)}}/>
+                                <button onClick={() => dispatch(updateUserName({id: user.id, username: newUsername}))} className="flex flex-1 mr-10 mt-4 ml-5 h-7 w-40 bg-slate-200 items-center justify-center">Update Username</button>
+                                <button onClick={() => dispatch(deleteUser({id: user.id}))} className="flex flex-1 mr-10 mt-4 h-7 w-40 bg-slate-200 items-center justify-center">Delete User</button>
                             </div>
                         </div>
                     )
