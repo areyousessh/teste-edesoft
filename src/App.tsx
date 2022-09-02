@@ -15,7 +15,7 @@ export function App() {
             <div className="flex flex-1">
                 <input className="mt-20 mr-10 text-center" type="text" placeholder="Name" onChange={(event) => {setName(event.target.value)}}/>
                 <input className="mt-20 mr-10 text-center" type="text" placeholder="Username" onChange={(event) => {setUserName(event.target.value)}}/>
-                <button onClick={() => {dispatch(addUser({id: userList[userList.lenght -1]. id + 1 , name , username}))}} className="mt-20 mr-10 bg-slate-200 w-20">Add User</button>
+                <button onClick={() => {dispatch(addUser({id: userList[userList.length -1]. id + 1 , name , username}))}} className="mt-20 mr-10 bg-slate-200 w-20">Add User</button>
             </div>
 
             <div className="flex flex-1 flex-col items-center justify-center mt-20">
